@@ -117,7 +117,7 @@ The repository includes a production-grade **GitHub Actions CI/CD Pipeline** def
    git add .
    git commit -m "feat: update to GlobalCo branding and complete assessment"
    git branch -M main
-   git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/globalco-career-portal.git
+   git remote add origin https://github.com/adityabhawsar221/globalco-career-portal.git
    git push -u origin main
    ```
 
