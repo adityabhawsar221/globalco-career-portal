@@ -1,0 +1,12 @@
+{
+  "name": "globalco-career-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official Career & Hiring Portal for GlobalCo",
+  "scripts": {
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm test --prefix backend"
+  }
+}
