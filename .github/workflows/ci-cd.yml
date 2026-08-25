@@ -48,7 +48,7 @@ jobs:
 
       - name: 🔍 Verify Build Artifacts
         run: |
-          test -d frontend/dist && echo "✅ Frontend production build artifact verified."
+          (test -d dist || test -d frontend/dist) && echo "✅ Frontend production build artifact verified."
 
   # -----------------------------------------------------------
   # 2. CONTINUOUS DEPLOYMENT (CD)
