@@ -2,7 +2,7 @@ import React from "react";
 import { Briefcase, PlusCircle, LayoutDashboard, Bookmark, Sun, Moon, LogOut, UserCheck } from "lucide-react";
 import { useJobContext } from "../context/JobContext";
 
-export default function Navbar() {
+Navbar() {
   const {
     theme,
     toggleTheme,
@@ -24,7 +24,7 @@ export default function Navbar() {
           <img src="/globalco-logo.png" alt="GlobalCo" style={{ height: "28px", objectFit: "contain" }} />
         </div>
         <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em", borderLeft: "2px solid var(--border-color)", paddingLeft: "0.85rem" }}>
-          Careers Portal | Built for GlobalCo 🚀
+          Careers Portal
         </span>
       </div>
 
