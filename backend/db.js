@@ -29,19 +29,15 @@ export async function connectDB() {
 
       const jobsCount = await JobModel.countDocuments();
       const applicationsCount = await ApplicationModel.countDocuments();
-      const hasNonGlobalCoJobs = await JobModel.exists({ company: { $ne: "GlobalCo" } });
-      const hasNonGlobalCoApplications = await ApplicationModel.exists({ company: { $ne: "GlobalCo" } });
 
-      if (jobsCount === 0 || hasNonGlobalCoJobs) {
-        await JobModel.deleteMany({});
+      if (jobsCount === 0) {
         await JobModel.insertMany(initialJobs);
-        console.log(`🌱 Re-seeded ${initialJobs.length} GlobalCo jobs into MongoDB.`);
+        console.log(`🌱 Initialized ${initialJobs.length} GlobalCo jobs in MongoDB.`);
       }
 
-      if (applicationsCount === 0 || hasNonGlobalCoApplications) {
-        await ApplicationModel.deleteMany({});
+      if (applicationsCount === 0) {
         await ApplicationModel.insertMany(initialApplications);
-        console.log(`🌱 Re-seeded ${initialApplications.length} GlobalCo applications into MongoDB.`);
+        console.log(`🌱 Initialized ${initialApplications.length} GlobalCo applications in MongoDB.`);
       }
     }
     return isConnected;
