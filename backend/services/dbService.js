@@ -355,6 +355,7 @@ export const dbService = {
   getJobs,
   getJobById,
   createJob,
+  updateJob,
   deleteJob,
   createApplication,
   updateApplicationStatus,
