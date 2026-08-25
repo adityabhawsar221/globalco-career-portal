@@ -1,4 +1,3 @@
-```markdown
 # 🏢 GlobalCo — Official Career & Talent Portal
 
 ![Node.js](https://img.shields.io/badge/Node.js-v20-green?style=flat-square&logo=node.js)
@@ -32,9 +31,7 @@ The **GlobalCo Career & Talent Portal** is a production-ready web application bu
 
 ## 🌟 Business Value & Key Features
 
-
 ```
-
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                         GLOBALCO TALENT HUB                              │
 ├────────────────────────────────────┬─────────────────────────────────────┤
@@ -45,10 +42,10 @@ The **GlobalCo Career & Talent Portal** is a production-ready web application bu
 │  • Real-Time Application Tracking  │  • Publish GlobalCo Job Openings    │
 │  • Saved Bookmarks & Dark Mode     │  • Database Seed Reset & Analytics  │
 └────────────────────────────────────┴─────────────────────────────────────┘
-
 ```
 
 ### 1. 🔍 Candidate Experience
+
 * **Live Search & Filters:** Filter jobs by title, skills (`React`, `Node.js`, `Python`, `MongoDB`), work style (`📍 Hyderabad Onsite`, `🏢 Hybrid`, `🌐 Remote`), and minimum salary.
 * **Featured Roles:** Highlights priority openings like **Software Developer (Onsite - Hyderabad)** with transparent salary ranges (₹12L - ₹20L INR) and company perks.
 * **Quick Application:** Submit contact information, GitHub/portfolio links, and a cover letter in a single modal.
@@ -56,6 +53,7 @@ The **GlobalCo Career & Talent Portal** is a production-ready web application bu
 * **Bookmarks & Theme Toggle:** Save jobs locally to review later and switch between dark and light themes.
 
 ### 2. 🏢 HR & Recruiter Tools
+
 * **Talent Acquisition Dashboard:** View live recruitment stats including active job count, received applications, and hiring pipeline metrics.
 * **Applicant Tracking System (ATS):** Review candidate credentials, experience, and contact links with 1-click status actions (`Shortlist`, `Select`, `Reject`).
 * **Job Management:** Create and publish new internal job requisitions with required skill tags and salary bounds.
@@ -65,31 +63,25 @@ The **GlobalCo Career & Talent Portal** is a production-ready web application bu
 
 ## 🏗️ Technical Architecture
 
-
 ```
-
-```
-                             ┌─────────────────────────────────────┐
-                             │       React 18 + Vite Frontend      │
-                             │ (Glassmorphic CSS, JobContext State)│
-                             └──────────────────┬──────────────────┘
-                                                │
-                                                │ REST API Requests (/api/*)
-                                                ▼
-                             ┌─────────────────────────────────────┐
-                             │     Express.js API Engine (Node.js) │
-                             │   (JWT Auth, Validation, Handlers)  │
-                             └──────────────────┬──────────────────┘
-                                                │
-                         ┌──────────────────────┴──────────────────────┐
-                         ▼                                             ▼
-             ┌───────────────────────┐                     ┌───────────────────────┐
-             │     MongoDB Atlas     │                     │ In-Memory Fallback DB │
-             │ (Mongoose Schemas/DB) │                     │ (Zero-Config Resilience)│
-             └───────────────────────┘                     └───────────────────────┘
-
-```
-
+                                 ┌─────────────────────────────────────┐
+                                 │       React 18 + Vite Frontend      │
+                                 │ (Glassmorphic CSS, JobContext State)│
+                                 └──────────────────┬──────────────────┘
+                                                    │
+                                                    │ REST API Requests (/api/*)
+                                                    ▼
+                                 ┌─────────────────────────────────────┐
+                                 │     Express.js API Engine (Node.js) │
+                                 │   (JWT Auth, Validation, Handlers)  │
+                                 └──────────────────┬──────────────────┘
+                                                    │
+                             ┌──────────────────────┴──────────────────────┐
+                             ▼                                             ▼
+                 ┌───────────────────────┐                     ┌───────────────────────┐
+                 │     MongoDB Atlas     │                     │ In-Memory Fallback DB │
+                 │ (Mongoose Schemas/DB) │                     │ (Zero-Config Resilience)│
+                 └───────────────────────┘                     └───────────────────────┘
 ```
 
 ---
@@ -98,12 +90,10 @@ The **GlobalCo Career & Talent Portal** is a production-ready web application bu
 
 The project uses an automated GitHub Actions CI/CD pipeline configured in [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml):
 
-
 ```
-
-[Developer Push / PR to 'main']
-│
-▼
+   [Developer Push / PR to 'main']
+                 │
+                 ▼
 ┌─────────────────────────────────────────────────┐
 │          JOB 1: Continuous Integration (CI)     │
 │  1. Checkout repository code                    │
@@ -114,15 +104,14 @@ The project uses an automated GitHub Actions CI/CD pipeline configured in [`.git
 │  6. Build production bundle (Vite build)        │
 │  7. Verify build output integrity               │
 └────────────────────────┬────────────────────────┘
-│ (On Success & Push to main)
-▼
+                         │ (On Success & Push to main)
+                         ▼
 ┌─────────────────────────────────────────────────┐
 │          JOB 2: Continuous Deployment (CD)      │
 │  1. Authenticate with Vercel API                │
 │  2. Deploy Serverless Backend & Static Frontend │
 │  3. Output Production URL                       │
 └─────────────────────────────────────────────────┘
-
 ```
 
 ---
@@ -130,45 +119,39 @@ The project uses an automated GitHub Actions CI/CD pipeline configured in [`.git
 ## 🚀 Step-by-Step Setup & Deployment
 
 ### Step 1: Push Code to GitHub
+
 ```bash
 git add .
 git commit -m "feat: complete GlobalCo technical assessment"
 git branch -M main
-git remote add origin [https://github.com/adityabhawsar221/globalco-career-portal.git](https://github.com/adityabhawsar221/globalco-career-portal.git)
+git remote add origin https://github.com/adityabhawsar221/globalco-career-portal.git
 git push -u origin main
-
 ```
 
 ### Step 2: Deploy to Vercel
 
-1. Open the [Vercel Dashboard](https://vercel.com/dashboard) and click **"Add New..." ➔ "Project"**.
+1. Open the [Vercel Dashboard](https://vercel.com/dashboard) and click **"Add New..."** ➔ **"Project"**.
 2. Select and import the `globalco-career-portal` repository.
-3. Keep Framework preset as **Other** (Vercel automatically detects [`vercel.json`](https://www.google.com/search?q=vercel.json)).
-4. *(Optional)* Add environment variables under **Settings**:
-* `MONGODB_URI`: Your MongoDB Atlas connection string.
-* `JWT_SECRET`: Any secure random key.
-
-
+3. Keep Framework preset as **Other** (Vercel automatically detects `vercel.json`).
+4. *(Optional)* Add environment variables under Settings:
+   - `MONGODB_URI`: Your MongoDB Atlas connection string.
+   - `JWT_SECRET`: Any secure random key.
 5. Click **Deploy**. Vercel will build both the frontend and API serverless routes automatically.
 
 ### Step 3: Configure GitHub Actions Secrets
 
 To run deployment directly through GitHub Actions:
-
-1. In your GitHub repository, navigate to **Settings ➔ Secrets and variables ➔ Actions**.
+1. In your GitHub repository, navigate to **Settings** ➔ **Secrets and variables** ➔ **Actions**.
 2. Add these repository secrets:
-* `VERCEL_TOKEN`: Found in Vercel Account Settings ➔ Tokens.
-* `VERCEL_ORG_ID`: Found in `.vercel/project.json` or team settings.
-* `VERCEL_PROJECT_ID`: Found in `.vercel/project.json` or project settings.
-
-
+   - `VERCEL_TOKEN`: Found in Vercel Account Settings ➔ Tokens.
+   - `VERCEL_ORG_ID`: Found in `.vercel/project.json` or team settings.
+   - `VERCEL_PROJECT_ID`: Found in `.vercel/project.json` or project settings.
 
 ---
 
 ## 🛠️ Local Development & Testing
 
 ### 1. Prerequisites
-
 * **Node.js:** v18.x or v20.x
 * **npm:** v9.x or higher
 
@@ -184,7 +167,6 @@ npm run dev
 cd frontend
 npm install
 npm run dev
-
 ```
 
 ### 3. Run Automated Tests
@@ -192,12 +174,10 @@ npm run dev
 ```bash
 cd backend
 npm test
-
 ```
 
-Expected output:
-
-```text
+**Expected output:**
+```
 TAP version 13
 # Subtest: hashPassword creates a hash that can be verified
 ok 1 - hashPassword creates a hash that can be verified
@@ -207,7 +187,6 @@ ok 2 - register and application status workflow works for candidate and recruite
 # tests 2
 # pass 2
 # fail 0
-
 ```
 
 ---
@@ -217,7 +196,7 @@ ok 2 - register and application status workflow works for candidate and recruite
 Use these pre-configured test accounts to review both candidate and recruiter interfaces:
 
 | Role | Username | Password | Purpose |
-| --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- |
 | **Candidate** | `candidate` | `candidate123` | Apply to jobs and track application progress |
 | **HR Recruiter** | `recruiter` | `recruiter123` | Manage ATS board, update statuses, and post jobs |
 | **Guest** | *(None)* | *(None)* | Explore public job listings without logging in |
@@ -227,7 +206,7 @@ Use these pre-configured test accounts to review both candidate and recruiter in
 ## 📡 REST API Reference
 
 | Endpoint | Method | Auth Required | Description |
-| --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- |
 | `/api/health` | `GET` | None (Public) | Check server uptime and database status |
 | `/api/auth/register` | `POST` | None (Public) | Register a new candidate or recruiter account |
 | `/api/auth/login` | `POST` | None (Public) | Authenticate user and return a JWT token |
@@ -237,7 +216,7 @@ Use these pre-configured test accounts to review both candidate and recruiter in
 | `/api/applications` | `POST` | Candidate (Bearer) | Submit an application for an opening |
 | `/api/applications` | `GET` | Recruiter (Bearer) | Retrieve all candidate applications |
 | `/api/applications/me` | `GET` | Candidate (Bearer) | Get applications for the logged-in candidate |
-| `/api/applications/:id/status` | `PATCH` | Recruiter (Bearer) | Update candidate status (`Shortlisted`, `Selected`, `Rejected`) |
+| `/api/applications/:id/status` | `PATCH` | Recruiter (Bearer) | Update candidate status (Shortlisted, Selected, Rejected) |
 | `/api/stats` | `GET` | None (Public) | Fetch live recruitment metrics for the dashboard |
 | `/api/seed` | `POST` | Admin/Bearer | Reset database to default sample dataset |
 
@@ -245,7 +224,7 @@ Use these pre-configured test accounts to review both candidate and recruiter in
 
 ## 📁 Repository Structure
 
-```text
+```
 jobs-board/
 ├── .github/
 │   └── workflows/
@@ -268,10 +247,11 @@ jobs-board/
 │   ├── index.html            # HTML template
 │   ├── vite.config.js        # Vite proxy & build configuration
 │   └── package.json          # Frontend dependencies
+├── api/
+│   └── index.js              # Serverless bridge for Vercel
 ├── vercel.json               # Serverless build & API routing configuration
 ├── package.json              # Root workspace scripts
 └── README.md                 # Complete project documentation
-
 ```
 
 ---
@@ -284,7 +264,3 @@ jobs-board/
 * **Company:** GlobalCo
 
 *Thank you for reviewing this assessment submission. I look forward to your feedback!*
-
-```
-
-```
