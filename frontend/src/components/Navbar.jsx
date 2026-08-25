@@ -24,7 +24,7 @@ export default function Navbar() {
           <img src="/globalco-logo.png" alt="GlobalCo" style={{ height: "28px", objectFit: "contain" }} />
         </div>
         <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em", borderLeft: "2px solid var(--border-color)", paddingLeft: "0.85rem" }}>
-          Careers Portal
+          Careers Portal | Built for GlobalCo 🚀
         </span>
       </div>
 
