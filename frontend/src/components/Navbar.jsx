@@ -2,7 +2,7 @@ import React from "react";
 import { Briefcase, PlusCircle, LayoutDashboard, Bookmark, Sun, Moon, LogOut, UserCheck } from "lucide-react";
 import { useJobContext } from "../context/JobContext";
 
-Navbar() {
+export default function Navbar() {
   const {
     theme,
     toggleTheme,
