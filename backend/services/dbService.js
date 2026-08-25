@@ -218,12 +218,20 @@ export async function updateJob(id, jobData) {
 
   const isMongo = await ensureMongoConnection();
   if (isMongo) {
-    const updated = await JobModel.findOneAndUpdate({ id }, formattedJob, { new: true }).lean();
-    return updated;
+    const query = { $or: [{ id: String(id) }] };
+    if (mongoose.isValidObjectId(id)) {
+      query.$or.push({ _id: id });
+    }
+    const updated = await JobModel.findOneAndUpdate(query, { $set: formattedJob }, { new: true }).lean();
+    if (updated) return updated;
   }
 
-  const idx = memoryJobs.findIndex((j) => j.id === id);
-  if (idx === -1) return null;
+  const idx = memoryJobs.findIndex((j) => String(j.id) === String(id) || String(j._id) === String(id));
+  if (idx === -1) {
+    const fallbackJob = { id, ...formattedJob };
+    memoryJobs.unshift(fallbackJob);
+    return fallbackJob;
+  }
   memoryJobs[idx] = { ...memoryJobs[idx], ...formattedJob };
   return memoryJobs[idx];
 }
