@@ -8,8 +8,9 @@
 ![Deployment](https://img.shields.io/badge/Deploy-Vercel-black?style=flat-square&logo=vercel)
 ![Assessment](https://img.shields.io/badge/Assessment-Software%20Developer%20(Onsite%20Hyderabad)-purple?style=flat-square)
 
-The **GlobalCo Career & Talent Portal** is a production-ready web application built for **GlobalCo**. It connects job seekers with hiring teams by allowing candidates to search, apply for, and track job openings, while giving recruiters a complete dashboard to post jobs and review applicants.
+A modern, full-stack recruitment platform built for **GlobalCo**. It allows candidates to discover jobs, submit applications, and track progress, while giving recruiters a complete dashboard to manage hiring and post new roles.
 
+Built as part of the technical assessment for the **Software Developer (Onsite - Hyderabad)** role.
 ---
 
 ## 🔗 Live Links
