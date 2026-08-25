@@ -271,7 +271,7 @@ export const initialApplications = [
     applicantPhone: "+91 98765 43210",
     experienceYears: "3",
     portfolioUrl: "https://github.com/aditya",
-    coverLetter: "Dear Rafael Amancio and GlobalCo Hiring Team,\n\nI am thrilled to submit my technical assessment and application for the Software Developer (Onsite) position based in Hyderabad. I have built full-stack MERN applications, configured automated GitHub Actions CI/CD pipelines, and deployed scalable solutions on Vercel.\n\nI look forward to contributing to GlobalCo's engineering team onsite in Hyderabad!",
+    coverLetter: "Dear GlobalCo Hiring Team,\n\nI am thrilled to submit my technical assessment and application for the Software Developer (Onsite) position based in Hyderabad. I have built full-stack MERN applications, configured automated GitHub Actions CI/CD pipelines, and deployed scalable solutions on Vercel.\n\nI look forward to contributing to GlobalCo's engineering team onsite in Hyderabad!",
     appliedAt: "2026-08-25T09:30:00.000Z",
     status: "Shortlisted"
   },

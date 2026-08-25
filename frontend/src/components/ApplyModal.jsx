@@ -8,19 +8,21 @@ export default function ApplyModal() {
   const [formData, setFormData] = useState({
     applicantName: "",
     applicantEmail: "",
-    applicantPhone: "+91 98765 43210",
-    experienceYears: "3",
-    portfolioUrl: "https://github.com/aditya",
+    applicantPhone: "",
+    experienceYears: "2",
+    portfolioUrl: "",
     coverLetter: ""
   });
 
   useEffect(() => {
-    if (user && applyJobModal) {
+    if (applyJobModal) {
       setFormData((prev) => ({
         ...prev,
-        applicantName: user.name || "Aditya Bhawsar",
-        applicantEmail: user.email || "aditya@example.com",
-        coverLetter: prev.coverLetter || `Dear Hiring Team,\n\nI am thrilled to apply for the ${applyJobModal.title} position at GlobalCo. I have strong experience building scalable web applications with React, Node.js, and CI/CD pipelines, and I am excited about contributing to GlobalCo's engineering initiatives.`
+        applicantName: user?.name || prev.applicantName || "",
+        applicantEmail: user?.email || prev.applicantEmail || "",
+        applicantPhone: prev.applicantPhone || "",
+        portfolioUrl: prev.portfolioUrl || "",
+        coverLetter: prev.coverLetter || `Dear Hiring Team,\n\nI am applying for the ${applyJobModal.title} position at GlobalCo. I have hands-on experience in full-stack web development and software engineering, and I am excited about contributing to GlobalCo's engineering team.`
       }));
     }
   }, [user, applyJobModal]);
@@ -79,7 +81,7 @@ export default function ApplyModal() {
               <input
                 type="email"
                 className="form-control"
-                placeholder="aditya@example.com"
+                placeholder="you@example.com"
                 required
                 value={formData.applicantEmail}
                 onChange={(e) => setFormData({ ...formData, applicantEmail: e.target.value })}
@@ -87,12 +89,11 @@ export default function ApplyModal() {
             </div>
 
             <div className="form-group">
-              <label>Phone / WhatsApp Number *</label>
+              <label>Phone / WhatsApp Number</label>
               <input
                 type="tel"
                 className="form-control"
-                placeholder="+91 98765 43210"
-                required
+                placeholder="e.g. +91 98765 00000"
                 value={formData.applicantPhone}
                 onChange={(e) => setFormData({ ...formData, applicantPhone: e.target.value })}
               />
@@ -127,7 +128,7 @@ export default function ApplyModal() {
               <label>Candidate Cover Letter & Technical Pitch *</label>
               <textarea
                 className="form-control"
-                placeholder="Explain why you are an ideal fit for GlobalCo and summarize your technical background..."
+                placeholder="Explain why you are an ideal fit for this position..."
                 required
                 rows={5}
                 value={formData.coverLetter}
@@ -142,7 +143,7 @@ export default function ApplyModal() {
             </button>
             <button type="submit" className="btn-primary" disabled={submitting}>
               <Send size={16} />
-              <span>{submitting ? "Submitting Application..." : "Submit GlobalCo Application"}</span>
+              <span>{submitting ? "Submitting Application..." : "Submit Application"}</span>
             </button>
           </div>
         </form>
@@ -150,4 +151,3 @@ export default function ApplyModal() {
     </div>
   );
 }
-

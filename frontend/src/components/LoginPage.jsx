@@ -48,7 +48,7 @@ export default function LoginPage() {
     } else if (role === "recruiter") {
       setUsername("recruiter");
       setPassword("recruiter123");
-      setName("Rafael Amancio");
+      setName("Sarah Jenkins");
     }
   };
 

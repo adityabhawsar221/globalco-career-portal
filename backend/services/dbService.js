@@ -200,6 +200,34 @@ export async function createJob(jobData) {
   return newJob;
 }
 
+export async function updateJob(id, jobData) {
+  const formattedJob = {
+    ...jobData,
+    salaryMin: Number(jobData.salaryMin) || 0,
+    salaryMax: Number(jobData.salaryMax) || 0,
+    tags: Array.isArray(jobData.tags)
+      ? jobData.tags
+      : (jobData.tags || "").split(",").map((t) => t.trim()).filter(Boolean),
+    requirements: Array.isArray(jobData.requirements)
+      ? jobData.requirements
+      : (jobData.requirements || "").split("\n").map((r) => r.trim()).filter(Boolean),
+    perks: Array.isArray(jobData.perks)
+      ? jobData.perks
+      : (jobData.perks || "").split("\n").map((p) => p.trim()).filter(Boolean),
+  };
+
+  const isMongo = await ensureMongoConnection();
+  if (isMongo) {
+    const updated = await JobModel.findOneAndUpdate({ id }, formattedJob, { new: true }).lean();
+    return updated;
+  }
+
+  const idx = memoryJobs.findIndex((j) => j.id === id);
+  if (idx === -1) return null;
+  memoryJobs[idx] = { ...memoryJobs[idx], ...formattedJob };
+  return memoryJobs[idx];
+}
+
 export async function deleteJob(id) {
   const isMongo = await ensureMongoConnection();
   if (isMongo) {

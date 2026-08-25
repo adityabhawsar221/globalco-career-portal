@@ -30,10 +30,12 @@ export function JobProvider({ children }) {
   const [selectedJobType, setSelectedJobType] = useState("All");
   const [minSalary, setMinSalary] = useState(0);
 
-  // Saved Jobs (Bookmarks)
+  // User-isolated Saved Jobs (Bookmarks)
   const [savedJobIds, setSavedJobIds] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("globalco_saved")) || [];
+      const activeUser = JSON.parse(localStorage.getItem("globalco_user"));
+      const storageKey = activeUser?.username ? `globalco_saved_${activeUser.username}` : "globalco_saved_guest";
+      return JSON.parse(localStorage.getItem(storageKey)) || [];
     } catch {
       return [];
     }
@@ -54,6 +56,7 @@ export function JobProvider({ children }) {
   const [selectedJobModal, setSelectedJobModal] = useState(null);
   const [applyJobModal, setApplyJobModal] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
+  const [editJobModal, setEditJobModal] = useState(null);
 
   // Notification Banner
   const [toastMessage, setToastMessage] = useState(null);
@@ -74,10 +77,22 @@ export function JobProvider({ children }) {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  // Sync Saved Jobs
+  // Load Saved Jobs when user switches
   useEffect(() => {
-    localStorage.setItem("globalco_saved", JSON.stringify(savedJobIds));
-  }, [savedJobIds]);
+    try {
+      const storageKey = user?.username ? `globalco_saved_${user.username}` : "globalco_saved_guest";
+      const userSaved = JSON.parse(localStorage.getItem(storageKey)) || [];
+      setSavedJobIds(userSaved);
+    } catch {
+      setSavedJobIds([]);
+    }
+  }, [user]);
+
+  // Sync Saved Jobs for active user
+  useEffect(() => {
+    const storageKey = user?.username ? `globalco_saved_${user.username}` : "globalco_saved_guest";
+    localStorage.setItem(storageKey, JSON.stringify(savedJobIds));
+  }, [savedJobIds, user]);
 
   useEffect(() => {
     if (user) {
@@ -147,7 +162,7 @@ export function JobProvider({ children }) {
       setUser(authUser);
       setToken(data.data.token);
       setCurrentView("jobs");
-      showToast(mode === "signup" ? `Globalco account created for ${authUser.name}!` : `Welcome back, ${authUser.name}!`, "success");
+      showToast(mode === "signup" ? `GlobalCo account created for ${authUser.name}!` : `Welcome back, ${authUser.name}!`, "success");
       return true;
     } catch (error) {
       console.error("Login API error:", error);
@@ -160,7 +175,7 @@ export function JobProvider({ children }) {
     setUser(null);
     setToken("");
     setCurrentView("jobs");
-    showToast("Signed out of Globalco portal.", "info");
+    showToast("Signed out of GlobalCo portal.", "info");
   };
 
   const toggleSaveJob = (jobId) => {
@@ -325,6 +340,35 @@ export function JobProvider({ children }) {
     }
   };
 
+  // Update Existing Job (Recruiter)
+  const updateJob = async (jobId, jobData) => {
+    try {
+      const res = await fetch(`/api/jobs/${jobId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify(jobData)
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("✨ Job requisition updated successfully!", "success");
+        setEditJobModal(null);
+        setSelectedJobModal(null);
+        fetchJobs();
+        fetchDashboardData();
+        return true;
+      } else {
+        showToast(`Error: ${data.error}`, "error");
+        return false;
+      }
+    } catch (err) {
+      showToast("Server error while updating job", "error");
+      return false;
+    }
+  };
+
   // Reset Filters
   const resetFilters = () => {
     setSearchQuery("");
@@ -369,11 +413,14 @@ export function JobProvider({ children }) {
         setApplyJobModal,
         isPostJobOpen,
         setIsPostJobOpen,
+        editJobModal,
+        setEditJobModal,
         toastMessage,
         showToast,
         submitApplication,
         updateApplicationStatus,
         createJob,
+        updateJob,
         fetchJobs,
         fetchMyApplications
       }}
@@ -383,4 +430,6 @@ export function JobProvider({ children }) {
   );
 }
 
-export const useJobContext = () => useContext(JobContext);
+export function useJobContext() {
+  return useContext(JobContext);
+}

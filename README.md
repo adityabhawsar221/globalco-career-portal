@@ -25,7 +25,7 @@ Built as part of the technical assessment for the **Software Developer (Onsite -
 * **Applicant Name:** Aditya Bhawsar
 * **Role Applied:** Software Developer (Onsite - Hyderabad, India)
 * **Target Company:** GlobalCo
-* **Evaluator:** Rafael Amancio (Administrative Assistant)
+* **Hiring Team:** GlobalCo Talent Acquisition Team
 * **Core Stack:** MongoDB, Express.js, React 18, Node.js (MERN), Vite, GitHub Actions CI/CD, Vercel
 
 ---
@@ -261,7 +261,7 @@ jobs-board/
 
 * **Candidate:** Aditya Bhawsar
 * **Position:** Software Developer (Onsite - Hyderabad)
-* **Recipient:** Rafael Amancio (Administrative Assistant)
+* **Recipient:** GlobalCo Talent Acquisition & Hiring Team
 * **Company:** GlobalCo
 
 *Thank you for reviewing this assessment submission. I look forward to your feedback!*

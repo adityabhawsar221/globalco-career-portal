@@ -114,6 +114,22 @@ router.post("/jobs", requireAuth, async (req, res) => {
   }
 });
 
+router.put("/jobs/:id", requireAuth, async (req, res) => {
+  try {
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({ success: false, error: "Only recruiters can edit job listings" });
+    }
+    const updated = await dbService.updateJob(req.params.id, req.body);
+    if (!updated) {
+      return res.status(404).json({ success: false, error: "Job not found" });
+    }
+    res.json({ success: true, message: "Job listing updated successfully", data: updated });
+  } catch (error) {
+    console.error("Error updating job:", error);
+    res.status(500).json({ success: false, error: "Failed to update job listing" });
+  }
+});
+
 router.delete("/jobs/:id", requireAuth, async (req, res) => {
   try {
     const deleted = await dbService.deleteJob(req.params.id);

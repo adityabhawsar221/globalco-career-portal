@@ -1,11 +1,12 @@
 import React from "react";
-import { MapPin, Briefcase, Bookmark, ChevronRight, Users, Clock, Building2 } from "lucide-react";
+import { MapPin, Briefcase, Bookmark, ChevronRight, Users, Clock, Edit3 } from "lucide-react";
 import { useJobContext } from "../context/JobContext";
 
 export default function JobCard({ job }) {
-  const { savedJobIds, toggleSaveJob, setSelectedJobModal, setApplyJobModal } = useJobContext();
+  const { savedJobIds, toggleSaveJob, setSelectedJobModal, setApplyJobModal, setEditJobModal, user } = useJobContext();
 
   const isSaved = savedJobIds.includes(job.id);
+  const isRecruiter = user?.role === "recruiter";
 
   const formatSalaryRange = (min, max) => {
     if (!min && !max) return "Competitive Compensation";
@@ -60,13 +61,15 @@ export default function JobCard({ job }) {
           </div>
         </div>
 
-        <button
-          className={`bookmark-btn ${isSaved ? "saved" : ""}`}
-          onClick={() => toggleSaveJob(job.id)}
-          title={isSaved ? "Remove from saved bookmarks" : "Save this GlobalCo position"}
-        >
-          <Bookmark size={18} fill={isSaved ? "currentColor" : "none"} />
-        </button>
+        {!isRecruiter && (
+          <button
+            className={`bookmark-btn ${isSaved ? "saved" : ""}`}
+            onClick={() => toggleSaveJob(job.id)}
+            title={isSaved ? "Remove from saved bookmarks" : "Save this GlobalCo position"}
+          >
+            <Bookmark size={18} fill={isSaved ? "currentColor" : "none"} />
+          </button>
+        )}
       </div>
 
       {job.tags && job.tags.length > 0 && (
@@ -87,12 +90,19 @@ export default function JobCard({ job }) {
             <span>View Details</span>
             <ChevronRight size={16} />
           </button>
-          <button className="btn-primary" onClick={() => setApplyJobModal(job)}>
-            <span>Apply Now</span>
-          </button>
+          
+          {isRecruiter ? (
+            <button className="btn-primary" onClick={() => setEditJobModal(job)}>
+              <Edit3 size={15} />
+              <span>Edit Opening</span>
+            </button>
+          ) : (
+            <button className="btn-primary" onClick={() => setApplyJobModal(job)}>
+              <span>Apply Now</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 }
-

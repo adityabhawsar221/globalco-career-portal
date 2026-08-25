@@ -7,6 +7,7 @@ import JobCard from "./components/JobCard";
 import JobDetailsModal from "./components/JobDetailsModal";
 import ApplyModal from "./components/ApplyModal";
 import PostJobModal from "./components/PostJobModal";
+import EditJobModal from "./components/EditJobModal";
 import DashboardView from "./components/DashboardView";
 import ProfileView from "./components/ProfileView";
 import LoginPage from "./components/LoginPage";
@@ -126,6 +127,7 @@ function MainAppContent() {
       <JobDetailsModal />
       <ApplyModal />
       <PostJobModal />
+      <EditJobModal />
 
       {/* Footer */}
       <footer

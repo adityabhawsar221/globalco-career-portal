@@ -1,16 +1,22 @@
 import React from "react";
-import { X, MapPin, Briefcase, DollarSign, Calendar, Mail, CheckCircle2, ShieldCheck, Building2 } from "lucide-react";
+import { X, MapPin, Briefcase, DollarSign, Calendar, Mail, CheckCircle2, ShieldCheck, Edit3 } from "lucide-react";
 import { useJobContext } from "../context/JobContext";
 
 export default function JobDetailsModal() {
-  const { selectedJobModal, setSelectedJobModal, setApplyJobModal } = useJobContext();
+  const { selectedJobModal, setSelectedJobModal, setApplyJobModal, setEditJobModal, user } = useJobContext();
 
   if (!selectedJobModal) return null;
 
   const job = selectedJobModal;
+  const isRecruiter = user?.role === "recruiter";
 
-  const handleApplyClick = () => {
-    setApplyJobModal(job);
+  const handleActionClick = () => {
+    if (isRecruiter) {
+      setSelectedJobModal(null);
+      setEditJobModal(job);
+    } else {
+      setApplyJobModal(job);
+    }
   };
 
   return (
@@ -117,12 +123,18 @@ export default function JobDetailsModal() {
             <Mail size={15} />
             <span>Hiring Contact: {job.employerEmail || "careers@globalco.com"} (GlobalCo Talent Team)</span>
           </div>
-          <button className="btn-primary" onClick={handleApplyClick}>
-            Apply for this Position
+          <button className="btn-primary" onClick={handleActionClick}>
+            {isRecruiter ? (
+              <>
+                <Edit3 size={16} />
+                <span>Edit Job Requisition</span>
+              </>
+            ) : (
+              <span>Apply for this Position</span>
+            )}
           </button>
         </div>
       </div>
     </div>
   );
 }
-
