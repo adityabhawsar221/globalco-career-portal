@@ -26,7 +26,9 @@ function requireAuth(req, res, next) {
   }
 }
 
-app.get("/api/health", (req, res) => {
+const router = express.Router();
+
+router.get("/health", (req, res) => {
   res.json({
     status: "healthy",
     timestamp: new Date().toISOString(),
@@ -34,7 +36,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.post("/api/auth/register", async (req, res) => {
+router.post("/auth/register", async (req, res) => {
   try {
     const { name, username, password, role } = req.body;
     const authData = await dbService.registerUser({ name, username, password, role });
@@ -44,7 +46,7 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-app.post("/api/auth/login", async (req, res) => {
+router.post("/auth/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const authData = await dbService.loginUser({ username, password });
@@ -54,7 +56,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-app.get("/api/auth/me", requireAuth, (req, res) => {
+router.get("/auth/me", requireAuth, (req, res) => {
   res.json({
     success: true,
     data: {
@@ -65,7 +67,7 @@ app.get("/api/auth/me", requireAuth, (req, res) => {
   });
 });
 
-app.get("/api/jobs", async (req, res) => {
+router.get("/jobs", async (req, res) => {
   try {
     const { q, category, locationType, jobType, minSalary } = req.query;
     const jobs = await dbService.getJobs({
@@ -82,7 +84,7 @@ app.get("/api/jobs", async (req, res) => {
   }
 });
 
-app.get("/api/jobs/:id", async (req, res) => {
+router.get("/jobs/:id", async (req, res) => {
   try {
     const job = await dbService.getJobById(req.params.id);
     if (!job) {
@@ -94,7 +96,7 @@ app.get("/api/jobs/:id", async (req, res) => {
   }
 });
 
-app.post("/api/jobs", requireAuth, async (req, res) => {
+router.post("/jobs", requireAuth, async (req, res) => {
   try {
     const { title, company, location, salaryMin, salaryMax, description, employerEmail } = req.body;
     if (!title || !company || !location || !salaryMin || !salaryMax || !description || !employerEmail) {
@@ -112,7 +114,7 @@ app.post("/api/jobs", requireAuth, async (req, res) => {
   }
 });
 
-app.delete("/api/jobs/:id", requireAuth, async (req, res) => {
+router.delete("/jobs/:id", requireAuth, async (req, res) => {
   try {
     const deleted = await dbService.deleteJob(req.params.id);
     if (!deleted) {
@@ -124,7 +126,7 @@ app.delete("/api/jobs/:id", requireAuth, async (req, res) => {
   }
 });
 
-app.post("/api/applications", requireAuth, async (req, res) => {
+router.post("/applications", requireAuth, async (req, res) => {
   try {
     const { jobId, applicantName, applicantEmail, coverLetter } = req.body;
     if (!jobId || !applicantName || !applicantEmail || !coverLetter) {
@@ -142,7 +144,7 @@ app.post("/api/applications", requireAuth, async (req, res) => {
   }
 });
 
-app.get("/api/applications", requireAuth, async (req, res) => {
+router.get("/applications", requireAuth, async (req, res) => {
   try {
     const apps = await dbService.getApplications();
     res.json({ success: true, count: apps.length, data: apps });
@@ -151,7 +153,7 @@ app.get("/api/applications", requireAuth, async (req, res) => {
   }
 });
 
-app.get("/api/applications/me", requireAuth, async (req, res) => {
+router.get("/applications/me", requireAuth, async (req, res) => {
   try {
     const apps = await dbService.getApplicationsForUser(req.user.id);
     res.json({ success: true, count: apps.length, data: apps });
@@ -160,7 +162,7 @@ app.get("/api/applications/me", requireAuth, async (req, res) => {
   }
 });
 
-app.patch("/api/applications/:id/status", requireAuth, async (req, res) => {
+router.patch("/applications/:id/status", requireAuth, async (req, res) => {
   try {
     if (req.user.role !== "recruiter") {
       return res.status(403).json({ success: false, error: "Only recruiters can update application status" });
@@ -174,7 +176,7 @@ app.patch("/api/applications/:id/status", requireAuth, async (req, res) => {
   }
 });
 
-app.get("/api/stats", async (req, res) => {
+router.get("/stats", async (req, res) => {
   try {
     const stats = await dbService.getStats();
     res.json({ success: true, data: stats });
@@ -183,7 +185,7 @@ app.get("/api/stats", async (req, res) => {
   }
 });
 
-app.post("/api/seed", requireAuth, async (req, res) => {
+router.post("/seed", requireAuth, async (req, res) => {
   try {
     await dbService.resetSeed();
     res.json({ success: true, message: "Database re-seeded with initial sample data" });
@@ -191,6 +193,10 @@ app.post("/api/seed", requireAuth, async (req, res) => {
     res.status(500).json({ success: false, error: "Failed to seed database" });
   }
 });
+
+// Mount on both /api and root /
+app.use("/api", router);
+app.use("/", router);
 
 const PORT = Number(process.env.PORT || 5000);
 
