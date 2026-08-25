@@ -5,9 +5,10 @@ import { ApplicationModel } from "../models/applicationModel.js";
 import { UserModel } from "../models/userModel.js";
 import { hashPassword, verifyPassword, generateToken } from "./authService.js";
 
+const DEFAULT_MONGO_URI = "mongodb+srv://ownerOfApp:Aditya%40123@cluster0.lf76dnr.mongodb.net/hirepulse-jobs-board?retryWrites=true&w=majority";
+
 async function ensureMongoConnection() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) return false;
+  const uri = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
 
   if (mongoose.connection.readyState === 1) return true;
 

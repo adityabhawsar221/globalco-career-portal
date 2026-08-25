@@ -8,13 +8,10 @@ import { hashPassword, verifyPassword, verifyToken } from "./services/authServic
 
 let isConnected = false;
 
+const DEFAULT_MONGO_URI = "mongodb+srv://ownerOfApp:Aditya%40123@cluster0.lf76dnr.mongodb.net/hirepulse-jobs-board?retryWrites=true&w=majority";
+
 export async function connectDB() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) {
-    console.log("ℹ️ MONGODB_URI not found in environment. Using fallback mode.");
-    isConnected = false;
-    return false;
-  }
+  const uri = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
 
   if (mongoose.connection.readyState === 1) {
     isConnected = true;
