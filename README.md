@@ -1,7 +1,6 @@
 # 🏢 GlobalCo Career Portal — Technical Assessment Project
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://globalco-career-portal.vercel.app)
-[![API Status](https://img.shields.io/badge/API%20Status-Operational-success?style=for-the-badge&logo=fastapi)](https://globalco-career-portal.vercel.app/api/health)
 [![CI/CD Workflow](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/adityabhawsar221/globalco-career-portal/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
@@ -11,7 +10,6 @@ It simulates a career portal and internal hiring system: candidates can explore 
 
 * **Live Demo:** [https://globalco-career-portal.vercel.app](https://globalco-career-portal.vercel.app)
 * **GitHub Repo:** [https://github.com/adityabhawsar221/globalco-career-portal](https://github.com/adityabhawsar221/globalco-career-portal)
-* **API Health Check:** [https://globalco-career-portal.vercel.app/api/health](https://globalco-career-portal.vercel.app/api/health)
 
 ---
 
@@ -94,27 +92,13 @@ Growing tech companies face three common hiring bottlenecks:
 
 ## 3. AI Integration & Workflow
 
-AI was used as a pair-programming assistant across the entire assignment: planning, writing code, fixing bugs, and setting up CI/CD.
+AI was used as a pair-programming assistant across the assignment: planning, writing code, creating tests, and configuring CI/CD.
 
 ### How AI Was Used
-1. **Code Writing:** Created React UI components, Express API routes, and database models.
-2. **Serverless Setup:** Structured the project so the Express server works both on my local machine and as a serverless function on Vercel.
-3. **CI/CD Setup:** Wrote the GitHub Actions workflow to run automated tests and deploy to Vercel automatically.
-4. **Unit Testing:** Wrote tests for password hashing and candidate application status updates using Node's built-in `node:test`.
-
-### Real Problems Solved With AI (Simplified)
-
-* **1. Deploying Express Backend to Vercel Serverless:**
-  * *What happened:* Usually, an Express backend needs to run continuously on a server using `app.listen()`. But Vercel is designed for serverless functions, so running the backend directly did not work.
-  * *How AI helped:* AI helped create `api/index.js` to bridge Express into a serverless handler, so both the React frontend and Express API run together on Vercel without needing a separate backend server.
-
-* **2. Connecting Frontend to Backend (Routing & CORS):**
-  * *What happened:* On my local laptop, React runs on port 3000 and the Express API runs on port 5000. On Vercel, everything runs on one single web address. This caused connection errors when trying to fetch jobs.
-  * *How AI helped:* AI helped set up the proxy in Vite for local development and rewrite rules in `vercel.json` for production. Now `/api/jobs` works smoothly on both my local machine and the live site.
-
-* **3. Setting Up the Automated CI/CD Pipeline:**
-  * *What happened:* Creating a GitHub Actions YAML workflow from scratch with dependencies, testing, and Vercel credentials was tricky and error-prone.
-  * *How AI helped:* AI generated the clean `.github/workflows/ci-cd.yml` file, added npm dependency caching to make builds faster, and configured automated deployment whenever code is pushed to Git.
+1. **Code Generation:** Generated React UI components, Express API routes, and data validation.
+2. **Serverless Setup:** Structured the Express server so it runs smoothly on both local development and as a serverless function on Vercel.
+3. **CI/CD Automation:** Created the GitHub Actions workflow to run automated tests and deploy to Vercel automatically.
+4. **Unit Testing:** Created tests for password hashing and candidate application status updates using Node's built-in `node:test`.
 
 ### Prompts Log
 
@@ -193,7 +177,7 @@ cd backend
 npm install
 npm run dev
 ```
-Runs at `http://localhost:5000` (Health check: `http://localhost:5000/api/health`)
+Runs at `http://localhost:5000`
 
 **Terminal 2 — Frontend:**
 ```bash
@@ -230,7 +214,6 @@ Use these pre-made accounts to test the app without signing up:
 
 | Method | Endpoint | Access | Description |
 | :---: | :--- | :---: | :--- |
-| `GET` | `/api/health` | Public | Check if the API is running |
 | `POST` | `/api/auth/register` | Public | Create a new user account |
 | `POST` | `/api/auth/login` | Public | Login and get JWT token |
 | `GET` | `/api/auth/me` | Logged In | Get current user profile |
