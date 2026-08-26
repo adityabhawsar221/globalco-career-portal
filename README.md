@@ -46,7 +46,7 @@ Growing tech companies face three common hiring bottlenecks:
 * **1-Click Apply:** Submit contact info, portfolio/GitHub link, and cover letter in a simple popup modal.
 * **Live Application Tracker:** Candidates see their application progress in real time (`Applied` ➔ `Shortlisted` ➔ `Selected` / `Rejected`).
 * **Recruiter ATS Hub:** Recruiters can review applicants, update candidate stages with one click, and post or edit job listings.
-* **Zero Downtime Fallback:** Uses MongoDB Atlas for cloud storage. If cloud database credentials are missing or slow, it switches to an in-memory database automatically so the app never crashes during review.
+* **Zero-Setup Data Store:** Runs with a built-in in-memory data store pre-loaded with sample GlobalCo jobs and applications, so anyone evaluating the project can test everything instantly with zero database setup.
 * **Modern UI:** Responsive design with dark/light mode toggle and clean card layouts.
 
 ---
@@ -56,7 +56,7 @@ Growing tech companies face three common hiring bottlenecks:
 ### Tech Stack
 * **Frontend:** React 18, Vite, Context API (`JobContext`), Vanilla CSS3 (clean custom styles, no heavy frameworks).
 * **Backend:** Node.js v20, Express.js (REST API, JWT authentication, `bcryptjs` password hashing).
-* **Database:** MongoDB Atlas (Mongoose ODM) + built-in In-Memory fallback store.
+* **Data Storage:** Built-in In-Memory Data Store (Fast, zero-setup, pre-seeded with GlobalCo openings and demo candidate applications).
 * **Testing:** Node.js Native Test Runner (`node:test`).
 * **CI/CD:** GitHub Actions (`.github/workflows/ci-cd.yml`).
 * **Hosting:** Vercel (React Frontend + Serverless Express API at `/api`).
@@ -80,13 +80,14 @@ Growing tech companies face three common hiring bottlenecks:
                         ┌─────────────────────────────────────┐
                         │       Express REST API Engine       │
                         │   JWT Auth • CORS • Routes Handlers │
-                        └──────────┬────────────────┬─────────┘
-                                   │                │
-                        (Primary)  ▼                ▼  (Fallback)
-                        ┌────────────────────┐   ┌────────────────────┐
-                        │ MongoDB Atlas      │   │ In-Memory DB       │
-                        │ Cloud Database     │   │ Zero-Downtime Mock │
-                        └────────────────────┘   └────────────────────┘
+                        └──────────────────┬──────────────────┘
+                                           │
+                                           ▼
+                        ┌─────────────────────────────────────┐
+                        │     Built-in In-Memory Data Store   │
+                        │ Pre-loaded GlobalCo Jobs & Demo ATS │
+                        │  Zero Config • 100% Uptime for Demo │
+                        └─────────────────────────────────────┘
 ```
 
 ---
@@ -97,30 +98,30 @@ AI was used as a pair-programming assistant across the entire assignment: planni
 
 ### How AI Was Used
 1. **Code Writing:** Created React UI components, Express API routes, and database models.
-2. **Architecture Planning:** Structured the project so the Express server works both on my local machine and as a serverless function on Vercel.
-3. **CI/CD Setup:** Wrote the GitHub Actions workflow to run automated tests and deploy to Vercel.
+2. **Serverless Setup:** Structured the project so the Express server works both on my local machine and as a serverless function on Vercel.
+3. **CI/CD Setup:** Wrote the GitHub Actions workflow to run automated tests and deploy to Vercel automatically.
 4. **Unit Testing:** Wrote tests for password hashing and candidate application status updates using Node's built-in `node:test`.
 
 ### Real Problems Solved With AI (Simplified)
 
-* **1. Database Disconnecting on the Cloud:**
-  * *What happened:* On Vercel, the server turns off when nobody is visiting the site. When someone opened the page again, the database was disconnected, making the site slow or show an error.
-  * *How AI helped:* AI helped create an automatic connection check. Every time a request comes in, the app makes sure the database is connected before fetching data, keeping the website fast and reliable.
+* **1. Deploying Express Backend to Vercel Serverless:**
+  * *What happened:* Usually, an Express backend needs to run continuously on a server using `app.listen()`. But Vercel is designed for serverless functions, so running the backend directly did not work.
+  * *How AI helped:* AI helped create `api/index.js` to bridge Express into a serverless handler, so both the React frontend and Express API run together on Vercel without needing a separate backend server.
 
-* **2. Added Jobs Disappeared After Server Restart:**
-  * *What happened:* When a recruiter added a new job listing, it showed up on screen. But whenever the server restarted, the code wiped the database and reloaded the default sample jobs, losing all newly created jobs.
-  * *How AI helped:* AI found the line of code that was clearing the database on startup. We changed it so starter jobs are only loaded once. Any new jobs added by recruiters are now saved permanently.
+* **2. Connecting Frontend to Backend (Routing & CORS):**
+  * *What happened:* On my local laptop, React runs on port 3000 and the Express API runs on port 5000. On Vercel, everything runs on one single web address. This caused connection errors when trying to fetch jobs.
+  * *How AI helped:* AI helped set up the proxy in Vite for local development and rewrite rules in `vercel.json` for production. Now `/api/jobs` works smoothly on both my local machine and the live site.
 
-* **3. Frontend Could Not Talk to Backend:**
-  * *What happened:* On my local laptop, the React frontend runs on port 3000 and the Express backend runs on port 5000. On Vercel, everything runs under one web address. This caused connection errors when trying to fetch jobs.
-  * *How AI helped:* AI helped configure the routing rules. Now the frontend talks to the backend smoothly on my local computer during development, and also on the live Vercel website without any connection errors.
+* **3. Setting Up the Automated CI/CD Pipeline:**
+  * *What happened:* Creating a GitHub Actions YAML workflow from scratch with dependencies, testing, and Vercel credentials was tricky and error-prone.
+  * *How AI helped:* AI generated the clean `.github/workflows/ci-cd.yml` file, added npm dependency caching to make builds faster, and configured automated deployment whenever code is pushed to Git.
 
 ### Prompts Log
 
 | Phase | Prompt Used | Output |
 | :--- | :--- | :--- |
-| **Planning** | *"Design a full-stack career board for GlobalCo with a candidate portal, recruiter ATS, Express API, MongoDB Atlas, and Vercel deployment."* | Folder structure, REST endpoints list, and database schemas. |
-| **Database** | *"Write a database service in Express that connects to MongoDB Atlas, but falls back to in-memory mock data if MONGODB_URI is not set."* | `backend/services/dbService.js` and `backend/db.js` with failover logic. |
+| **Planning** | *"Design a full-stack career board for GlobalCo with a candidate portal, recruiter ATS, Express API, and Vercel deployment."* | Folder structure, REST endpoints list, and project design. |
+| **Backend** | *"Write an Express service with in-memory storage pre-loaded with sample GlobalCo jobs and applications so it works immediately without external setup."* | `backend/services/dbService.js` and data handlers. |
 | **Recruiter ATS** | *"Build a React component where recruiters can view candidate applications and click buttons to change status to Shortlisted, Selected, or Rejected."* | `DashboardView.jsx` with instant status updates and recruitment stats. |
 | **CI/CD** | *"Create a GitHub Actions workflow that caches npm packages, runs backend unit tests, builds the Vite frontend, and deploys to Vercel on main branch push."* | `.github/workflows/ci-cd.yml` with CI and CD pipeline jobs. |
 | **Testing** | *"Write unit tests using node:test for password hashing and candidate application status updates."* | `backend/test/auth.test.js` running in under 200ms with zero extra dependencies. |
@@ -180,11 +181,9 @@ Create a `.env` file in the `backend/` folder:
 PORT=5000
 NODE_ENV=development
 JWT_SECRET=globalco-secret-key-2026
-# Optional: Add your MongoDB URI, or leave blank to use the built-in In-Memory DB
-MONGODB_URI=
 ```
 
-> **Note:** If `MONGODB_URI` is left blank, the app starts with sample GlobalCo jobs and applications automatically.
+> **Note:** Zero database configuration is required. The app starts with pre-loaded sample GlobalCo jobs and candidate applications right away!
 
 ### Step 3: Run the Project
 
@@ -245,11 +244,11 @@ Use these pre-made accounts to test the app without signing up:
 | `GET` | `/api/applications/me` | Candidate | View my submitted applications |
 | `PATCH`| `/api/applications/:id/status` | Recruiter | Change candidate status (`Shortlisted`, `Selected`, `Rejected`) |
 | `GET` | `/api/stats` | Public | Get live recruitment stats |
-| `POST` | `/api/seed` | Recruiter | Reset database with fresh sample data |
+| `POST` | `/api/seed` | Recruiter | Reset data with fresh sample dataset |
 
-### Core Database Schemas
+### Core Data Models
 
-#### Job Schema
+#### Job Model
 * `id` (String, unique)
 * `title` (String)
 * `company` (String, e.g., "GlobalCo")
@@ -260,7 +259,7 @@ Use these pre-made accounts to test the app without signing up:
 * `tags`, `requirements`, `perks` (Arrays of Strings)
 * `postedAt` (Date)
 
-#### Application Schema
+#### Application Model
 * `id` (String, unique)
 * `jobId` (String)
 * `jobTitle` (String)
@@ -279,6 +278,6 @@ Use these pre-made accounts to test the app without signing up:
 
 * **Candidate Name:** Aditya Bhawsar
 * **Applying For:** Software Developer (Onsite — Hyderabad)
-* **Application Target:** GlobalCo
+* **Target Company:** GlobalCo
 * **Email:** [adityabhawar21@gmail.com](mailto:adityabhawar21@gmail.com)
 * **Note:** This project is a technical assessment submission created as part of the recruitment process for GlobalCo.
