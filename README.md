@@ -22,7 +22,7 @@ It simulates a career portal and internal hiring system: candidates can explore 
 5. [Local Setup & Installation](#5-local-setup--installation)
 6. [Demo Accounts](#6-demo-accounts)
 7. [API & Architecture Reference](#7-api--architecture-reference)
-8. [Candidate Details](#8-candidate-details)
+8. [Assessment Submission](#8-assessment-submission)
 
 ---
 
@@ -35,16 +35,16 @@ Growing tech companies face three common hiring bottlenecks:
 * **Lack of Candidate Feedback:** Job applicants rarely have visibility into where their application stands.
 
 ### Target Audience
-* **Job Candidates:** Applicants looking for engineering roles (such as Software Developer in Hyderabad) with transparent salary ranges in INR and real-time status tracking.
+* **Job Candidates:** Applicants looking for engineering roles (such as Software Developer in Hyderabad) with transparent salary ranges in INR and application status tracking.
 * **GlobalCo Recruiters:** HR team members managing candidate pipelines in a simple Kanban-style ATS and posting new openings.
 * **Hiring Managers:** Team leads needing quick visibility into applicants and open roles.
 
 ### Key Features
 * **Job Search & Multi-Filters:** Filter by title, department, work mode (`Onsite - Hyderabad`, `Hybrid`, `Remote`), and minimum salary.
 * **1-Click Apply:** Submit contact info, portfolio/GitHub link, and cover letter in a simple popup modal.
-* **Live Application Tracker:** Candidates see their application progress in real time (`Applied` ➔ `Shortlisted` ➔ `Selected` / `Rejected`).
+* **Application Tracking:** Candidates can view their current application status (Applied → Shortlisted → Selected / Rejected).
 * **Recruiter ATS Hub:** Recruiters can review applicants, update candidate stages with one click, and post or edit job listings.
-* **Zero-Setup Data Store:** Runs with a built-in in-memory data store pre-loaded with sample GlobalCo jobs and applications, so anyone evaluating the project can test everything instantly with zero database setup.
+* **Resilient Data Layer:** Uses MongoDB with an automatic in-memory fallback store, so anyone evaluating the project can test everything instantly with zero database setup.
 * **Modern UI:** Responsive design with dark/light mode toggle and clean card layouts.
 
 ---
@@ -54,7 +54,7 @@ Growing tech companies face three common hiring bottlenecks:
 ### Tech Stack
 * **Frontend:** React 18, Vite, Context API (`JobContext`), Vanilla CSS3 (clean custom styles, no heavy frameworks).
 * **Backend:** Node.js v20, Express.js (REST API, JWT authentication, `bcryptjs` password hashing).
-* **Data Storage:** Built-in In-Memory Data Store (Fast, zero-setup, pre-seeded with GlobalCo openings and demo candidate applications).
+* **Database:** MongoDB (Mongoose ODM) with built-in in-memory fallback store.
 * **Testing:** Node.js Native Test Runner (`node:test`).
 * **CI/CD:** GitHub Actions (`.github/workflows/ci-cd.yml`).
 * **Hosting:** Vercel (React Frontend + Serverless Express API at `/api`).
@@ -78,14 +78,13 @@ Growing tech companies face three common hiring bottlenecks:
                         ┌─────────────────────────────────────┐
                         │       Express REST API Engine       │
                         │   JWT Auth • CORS • Routes Handlers │
-                        └──────────────────┬──────────────────┘
-                                           │
-                                           ▼
-                        ┌─────────────────────────────────────┐
-                        │     Built-in In-Memory Data Store   │
-                        │ Pre-loaded GlobalCo Jobs & Demo ATS │
-                        │  Zero Config • 100% Uptime for Demo │
-                        └─────────────────────────────────────┘
+                        └──────────┬────────────────┬─────────┘
+                                   │                │
+                        (Primary)  ▼                ▼  (Fallback)
+                        ┌────────────────────┐   ┌────────────────────┐
+                        │      MongoDB       │   │  In-Memory Store   │
+                        │ (Mongoose Schemas) │   │ Pre-seeded Demo DB │
+                        └────────────────────┘   └────────────────────┘
 ```
 
 ---
@@ -95,7 +94,7 @@ Growing tech companies face three common hiring bottlenecks:
 AI was used as a pair-programming assistant across the assignment: planning, writing code, creating tests, and configuring CI/CD.
 
 ### How AI Was Used
-1. **Code Generation:** Generated React UI components, Express API routes, and data validation.
+1. **Code Generation:** Generated React UI components, Express API routes, and Mongoose database schemas.
 2. **Serverless Setup:** Structured the Express server so it runs smoothly on both local development and as a serverless function on Vercel.
 3. **CI/CD Automation:** Created the GitHub Actions workflow to run automated tests and deploy to Vercel automatically.
 4. **Unit Testing:** Created tests for password hashing and candidate application status updates using Node's built-in `node:test`.
@@ -104,8 +103,8 @@ AI was used as a pair-programming assistant across the assignment: planning, wri
 
 | Phase | Prompt Used | Output |
 | :--- | :--- | :--- |
-| **Planning** | *"Design a full-stack career board for GlobalCo with a candidate portal, recruiter ATS, Express API, and Vercel deployment."* | Folder structure, REST endpoints list, and project design. |
-| **Backend** | *"Write an Express service with in-memory storage pre-loaded with sample GlobalCo jobs and applications so it works immediately without external setup."* | `backend/services/dbService.js` and data handlers. |
+| **Planning** | *"Design a full-stack career board for GlobalCo with a candidate portal, recruiter ATS, Express API, MongoDB, and Vercel deployment."* | Folder structure, REST endpoints list, and database schemas. |
+| **Backend & DB** | *"Write an Express service with MongoDB Mongoose schemas, and an in-memory fallback if MONGODB_URI is not set."* | `backend/services/dbService.js` and data handlers. |
 | **Recruiter ATS** | *"Build a React component where recruiters can view candidate applications and click buttons to change status to Shortlisted, Selected, or Rejected."* | `DashboardView.jsx` with instant status updates and recruitment stats. |
 | **CI/CD** | *"Create a GitHub Actions workflow that caches npm packages, runs backend unit tests, builds the Vite frontend, and deploys to Vercel on main branch push."* | `.github/workflows/ci-cd.yml` with CI and CD pipeline jobs. |
 | **Testing** | *"Write unit tests using node:test for password hashing and candidate application status updates."* | `backend/test/auth.test.js` running in under 200ms with zero extra dependencies. |
@@ -164,10 +163,14 @@ Create a `.env` file in the `backend/` folder:
 ```env
 PORT=5000
 NODE_ENV=development
-JWT_SECRET=globalco-secret-key-2026
+JWT_SECRET=your-secure-secret
+# Optional: Provide MongoDB connection string or leave blank for in-memory store
+MONGODB_URI=your-mongodb-connection-string
 ```
 
-> **Note:** Zero database configuration is required. The app starts with pre-loaded sample GlobalCo jobs and candidate applications right away!
+> **Security Note:** Never commit real secrets or environment files to the repository.
+
+> **Note:** If `MONGODB_URI` is left blank, the app starts with pre-loaded sample GlobalCo jobs and candidate applications in the in-memory store right away!
 
 ### Step 3: Run the Project
 
@@ -229,7 +232,7 @@ Use these pre-made accounts to test the app without signing up:
 | `GET` | `/api/stats` | Public | Get live recruitment stats |
 | `POST` | `/api/seed` | Recruiter | Reset data with fresh sample dataset |
 
-### Core Data Models
+### Core Data Models (Mongoose Schemas)
 
 #### Job Model
 * `id` (String, unique)
@@ -257,10 +260,10 @@ Use these pre-made accounts to test the app without signing up:
 
 ---
 
-## 8. Candidate Details
+## 8. Assessment Submission
 
-* **Candidate Name:** Aditya Bhawsar
-* **Applying For:** Software Developer (Onsite — Hyderabad)
-* **Target Company:** GlobalCo
-* **Email:** [adityabhawar21@gmail.com](mailto:adityabhawar21@gmail.com)
-* **Note:** This project is a technical assessment submission created as part of the recruitment process for GlobalCo.
+* **Candidate:** Aditya Bhawsar  
+* **Position:** Software Developer (Onsite — Hyderabad)  
+* **Company:** GlobalCo  
+
+This project was developed as part of the GlobalCo technical assessment.
